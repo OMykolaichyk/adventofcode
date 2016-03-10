@@ -22,18 +22,37 @@ func main() {
 	}
     defer file.Close()
 
-	var sum int = 0
+	var wrappingPaper int = 0
+	var ribbon int = 0
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		sum += WrapperPaper(scanner.Text())
+		lwh := scanner.Text()
+		wrappingPaper += WrappingPaper(lwh)
+		ribbon += Ribbon(lwh)
 	}
-	fmt.Println("Total wrapper paper needed", sum)
+	fmt.Println("Total wrapping paper needed", wrappingPaper)
+	fmt.Println("Total ribbon needed", ribbon)
 }
 
-func WrapperPaper(s string) (int) {
+func WrappingPaper(s string) (int) {
 	l, w, h := ParseInputData(s)
 	return BoxSurfaceArea(l, w, h) + BoxSmallestSideArea(l, w, h)
+}
+
+func Ribbon(s string) int {
+	return WrappingRibbon(s) + BowRibbon(s)
+}
+
+func WrappingRibbon(s string) (int) {
+	l, w, h := ParseInputData(s)
+	min1, min2 := TwoMin(l, w, h)
+	return min1*2+min2*2
+}
+
+func BowRibbon(s string) (int) {
+	l, w, h := ParseInputData(s)
+	return 	l*w*h
 }
 
 func ParseInputData(s string ) (l, w, h int) {
@@ -68,8 +87,12 @@ func BoxSurfaceArea(l, w, h int) int {
 
 func BoxSmallestSideArea(l, w, h int) int {
 	CheckIsValidBoxSidesSize(l, w, h)
-	lwh := []int{l, w ,h}
-	sort.Ints(lwh)
-	return lwh[0] * lwh[1]
+	min1, min2 := TwoMin(l, w, h)
+	return min1 * min2
+}
+
+func TwoMin(list ...int) (int, int){
+	sort.Ints(list)
+	return list[0], list[1]
 }
 

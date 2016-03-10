@@ -67,24 +67,71 @@ func TestBoxSmallestSideArea(t *testing.T) {
 
 func TestParseInputData(t *testing.T) {
 	if l,w,h := ParseInputData("2x3x4"); l != 2 || w != 3 || h != 4 {
-		t.Error("Calculated smallest box side area is wrong")	
+		t.Error("Invalid result of parsing input data")	
 	}
 	if l,w,h := ParseInputData("1x1x10"); l != 1 || w != 1 || h != 10 {
-		t.Error("Calculated smallest box side area is wrong")	
+		t.Error("Invalid result of parsing input data")	
 	}
 	if l,w,h := ParseInputData("5x5x5"); l != 5 || w != 5 || h != 5 {
-		t.Error("Calculated smallest box side area is wrong")	
+		t.Error("Invalid result of parsing input data")	
 	}
 }
 
-func TestWrapperPaper(t *testing.T) {
-	if res := WrapperPaper("2x3x4"); res != 58{
-		t.Error()
+func TestWrappingPaper(t *testing.T) {
+	if res := WrappingPaper("2x3x4"); res != 58{
+		t.Error("Invalid result of calculating wrapping paper")
 	}
-	if res := WrapperPaper("1x1x10"); res != 43{
-		t.Error()
+	if res := WrappingPaper("1x1x10"); res != 43{
+		t.Error("Invalid result of calculating wrapping paper")
 	}
-	if res := WrapperPaper("5x5x5"); res != 175{
-		t.Error()
+	if res := WrappingPaper("5x5x5"); res != 175{
+		t.Error("Invalid result of calculating wrapping paper")
+	}
+}
+
+func TestBowRibbon(t *testing.T) {
+	if res := BowRibbon("2x3x4"); res != 24 {
+		t.Error("Invalid result of calculating ribbon for bow")
+	}
+	if res := BowRibbon("1x1x10"); res != 10 {
+		t.Error("Invalid result of calculating ribbon for bow")
+	}
+	if res := BowRibbon("5x5x5"); res != 125 {
+		t.Error("Invalid result of calculating ribbon for bow")
+	}
+}
+
+func TestWrappingRibbon(t *testing.T) {
+	if res := WrappingRibbon("2x3x4"); res != 10{
+		t.Error("Invalid result of calculating wrapping ribbon")
+	}
+	if res := WrappingRibbon("1x1x10"); res != 4{
+		t.Error("Invalid result of calculating wrapping ribbon")
+	}
+	if res := WrappingRibbon("5x5x5"); res != 20{
+		t.Error("Invalid result of calculating wrapping ribbon")
+	}
+}
+
+func TestRibbon(t *testing.T) {
+	if res := Ribbon("2x3x4"); res != 34{
+		t.Error("Invalid result of calculating ribbon")
+	}
+	if res := Ribbon("1x1x10"); res != 14{
+		t.Error("Invalid result of calculating ribbon")
+	}
+	if res := Ribbon("5x5x5"); res != 145{
+		t.Error("Invalid result of calculating ribbon")
+	}
+}
+
+func TestTwoMin(t *testing.T) {
+	min1, min2 := TwoMin(5,0,1)
+	if min1 != 0 || min2 != 1 {
+		t.Error("Invalid result of TwoMin")
+	}
+	min1, min2 = TwoMin(5,4,6,2,1)
+	if min1 != 1 || min2 != 2 {
+		t.Error("Invalid result of TwoMin")
 	}
 }
