@@ -17,19 +17,26 @@ func main() {
 		panic(err)
 	}
 
-	floor := Process(string(f))
+	floor, pos := Process(string(f))
 	fmt.Println("Floor = ", floor)
+	fmt.Println("Pos = ", pos)
 }
 
-func Process(s string) int {
+func Process(s string) (int, int) {
 	var floor int = 0
-	for _, c := range s {
+	var flag bool = false
+	var pos int = 1
+	for i, c := range s {
 		switch c {
 		case '(':
 			floor++
 		case ')':
 			floor--
 		}
+		if !flag && floor == -1 {
+			flag = true
+			pos += i
+		} 
 	}
-	return floor
+	return floor, pos
 }
