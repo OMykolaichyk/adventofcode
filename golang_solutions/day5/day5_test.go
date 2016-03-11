@@ -53,20 +53,86 @@ func TestDoesContainAppearedSymbols(t *testing.T) {
 	}
 }
 
-func TestIsNiceString(t *testing.T) {
-	if !IsNiceString("ugknbfddgicrmopn") {
+func TestIsNiceStringPart1Rules(t *testing.T) {
+	if !IsNiceStringPart1Rules("ugknbfddgicrmopn") {
 		t.Error("\"ugknbfddgicrmopn\" is nice, but result is false")
 	}
-	if !IsNiceString("aaa") {
+	if !IsNiceStringPart1Rules("aaa") {
 		t.Error("\"aaa\" is nice, but result is false")
 	}
-	if IsNiceString("jchzalrnumimnmhp") {
+	if IsNiceStringPart1Rules("jchzalrnumimnmhp") {
 		t.Error("\"jchzalrnumimnmhp\" is naughty, but result is true")
 	}
-	if IsNiceString("haegwjzuvuyypxyu") {
+	if IsNiceStringPart1Rules("haegwjzuvuyypxyu") {
 		t.Error("\"haegwjzuvuyypxyu\" is naughty, but result is true")
 	}
-	if IsNiceString("dvszwmarrgswjxmb") {
+	if IsNiceStringPart1Rules("dvszwmarrgswjxmb") {
 		t.Error("\"dvszwmarrgswjxmb\" is naughty, but result is true")
 	}
 }
+
+func TestDoesContainAppearedSymbolPairs(t *testing.T) {
+	if !DoesContainAppearedSymbolPairs("xyxy") {
+		t.Error("\"xyxy\" does contain a pair of any two letters that appears at least twice in the string without overlapping, but result is false")
+	}
+	if !DoesContainAppearedSymbolPairs("aabcdefgaa") {
+		t.Error("\"aabcdefgaa\" does contain a pair of any two letters that appears at least twice in the string without overlapping, but result is false")
+	}
+	if !DoesContainAppearedSymbolPairs("qjhvhtzxzqqjkmpb") {
+		t.Error("\"qjhvhtzxzqqjkmpb\" does contain a pair of any two letters that appears at least twice in the string without overlapping, but result is false")
+	}
+	if !DoesContainAppearedSymbolPairs("xxyxx") {
+		t.Error("\"xxyxx\" does contain a pair of any two letters that appears at least twice in the string without overlapping, but result is false")
+	}
+	if !DoesContainAppearedSymbolPairs("uurcxstgmygtbstg") {
+		t.Error("\"uurcxstgmygtbstg\" does contain a pair of any two letters that appears at least twice in the string without overlapping, but result is false")
+	}
+	if DoesContainAppearedSymbolPairs("ieodomkazucvgmuy") {
+		t.Error("\"ieodomkazucvgmuy\" doesn't contain a pair of any two letters that appears at least twice in the string without overlapping, but result is true")
+	}
+	if DoesContainAppearedSymbolPairs("aaa") {
+		t.Error("\"aaa\" does contain a pair of any two letters that appears at least twice in the string with overlapping!, but result is true")
+	}
+}
+
+
+//does contain at least one letter which repeats with exactly one letter between them
+func TestDoesContainAppearedSymbolsWithOneBetween(t *testing.T) {
+	if !DoesContainAppearedSymbolsWithOneBetween("xyx") {
+		t.Error("\"xyx\" does contain at least one letter which repeats with exactly one letter between them, but result is false")
+	}
+	if !DoesContainAppearedSymbolsWithOneBetween("aaa") {
+		t.Error("\"aaa\" does contain at least one letter which repeats with exactly one letter between them, but result is false")
+	}
+	if !DoesContainAppearedSymbolsWithOneBetween("abcdefeghi") {
+		t.Error("\"abcdefeghi\" does contain at least one letter which repeats with exactly one letter between them, but result is false")
+	}
+	if !DoesContainAppearedSymbolsWithOneBetween("qjhvhtzxzqqjkmpb") {
+		t.Error("\"qjhvhtzxzqqjkmpb\" does contain at least one letter which repeats with exactly one letter between them, but result is false")
+	}
+	if !DoesContainAppearedSymbolsWithOneBetween("xxyxx") {
+		t.Error("\"xxyxx\" does contain at least one letter which repeats with exactly one letter between them, but result is false")
+	}
+	if DoesContainAppearedSymbolsWithOneBetween("uurcxstgmygtbstg") {
+		t.Error("\"uurcxstgmygtbstg\" does contain at least one letter which repeats with exactly one letter between them, but result is false")
+	}
+	if !DoesContainAppearedSymbolsWithOneBetween("ieodomkazucvgmuy") {
+		t.Error("\"ieodomkazucvgmuy\" does contain at least one letter which repeats with exactly one letter between them, but result is true")
+	}
+}
+
+func TestIsNiceStringPart2Rules(t *testing.T) {
+	if !IsNiceStringPart2Rules("qjhvhtzxzqqjkmpb") {
+		t.Error("\"qjhvhtzxzqqjkmpb\" is nice, but result is false")
+	}
+	if !IsNiceStringPart2Rules("xxyxx") {
+		t.Error("\"xxyxx\" is nice, but result is false")
+	}
+	if IsNiceStringPart2Rules("uurcxstgmygtbstg") {
+		t.Error("\"uurcxstgmygtbstg\" is naughty, but result is true")
+	}
+	if IsNiceStringPart2Rules("ieodomkazucvgmuy") {
+		t.Error("\"ieodomkazucvgmuy\" is naughty, but result is true")
+	}
+}
+
