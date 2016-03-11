@@ -2,20 +2,20 @@ package main
 
 import "testing"
 
-func TestDoesContainProbitedStrings(t *testing.T) {
-	if !DoesContainProbitedStrings("haegwjzuvuyypxyu") {
+func TestDoesContainProhibitedStrings(t *testing.T) {
+	if !DoesContainProhibitedStrings("haegwjzuvuyypxyu") {
 		t.Error("\"haegwjzuvuyypxyu\" does contain prohibited string, but result is false")
 	}
-	if !DoesContainProbitedStrings("acde") {
+	if !DoesContainProhibitedStrings("acde") {
 		t.Error("\"acde\" does contain prohibited string, but result is false")
 	}
-	if !DoesContainProbitedStrings("apqe") {
+	if !DoesContainProhibitedStrings("apqe") {
 		t.Error("\"apqe\" does contain prohibited string, but result is false")
 	}
-	if !DoesContainProbitedStrings("acabe"){
+	if !DoesContainProhibitedStrings("acabe"){
 		t.Error("\"acabe\" does contain prohibited string, but result is false")
 	}
-	if DoesContainProbitedStrings("qweefdsdfe") {
+	if DoesContainProhibitedStrings("qweefdsdfe") {
 		t.Error("\"qweefdsdfe\" doesn't contain prohibited string, but result is true")
 	}
 }

@@ -31,12 +31,12 @@ func main() {
 }
 
 func IsNiceString(s string) bool {
-	return !DoesContainProbitedStrings(s) &&
+	return !DoesContainProhibitedStrings(s) &&
 			(CountVowels(s) >= 3) &&
 			DoesContainAppearedSymbols(s)
 }
 
-func DoesContainProbitedStrings(s string) bool {
+func DoesContainProhibitedStrings(s string) bool {
 	return (strings.Index(s, "ab") != -1) || 
 			(strings.Index(s, "cd") != -1) || 
 			(strings.Index(s, "pq") != -1) || 
