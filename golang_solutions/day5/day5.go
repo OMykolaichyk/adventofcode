@@ -1,11 +1,11 @@
-package main 
+package main
 
-import(
-		"fmt"
-		"os"
-		"strings"
-		"bufio"
-		)
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
 
 func main() {
 	if len(os.Args) != 2 {
@@ -18,7 +18,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-    defer file.Close()
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	var numOfNiceStringsPart1Rules int
@@ -38,28 +38,28 @@ func main() {
 
 func IsNiceStringPart1Rules(s string) bool {
 	return !DoesContainProhibitedStrings(s) &&
-			(CountVowels(s) >= 3) &&
-			DoesContainAppearedSymbols(s)
+		(CountVowels(s) >= 3) &&
+		DoesContainAppearedSymbols(s)
 }
 
 func IsNiceStringPart2Rules(s string) bool {
 	return DoesContainAppearedSymbolsWithOneBetween(s) &&
-			DoesContainAppearedSymbolPairs(s)
+		DoesContainAppearedSymbolPairs(s)
 }
 
 func DoesContainProhibitedStrings(s string) bool {
-	return (strings.Index(s, "ab") != -1) || 
-			(strings.Index(s, "cd") != -1) || 
-			(strings.Index(s, "pq") != -1) || 
-			(strings.Index(s, "xy") != -1)
+	return (strings.Index(s, "ab") != -1) ||
+		(strings.Index(s, "cd") != -1) ||
+		(strings.Index(s, "pq") != -1) ||
+		(strings.Index(s, "xy") != -1)
 }
 
-func CountVowels(s string) int {	
+func CountVowels(s string) int {
 	return strings.Count(s, "a") +
-			strings.Count(s, "e") +
-			strings.Count(s, "i") +
-			strings.Count(s, "o") +
-			strings.Count(s, "u")
+		strings.Count(s, "e") +
+		strings.Count(s, "i") +
+		strings.Count(s, "o") +
+		strings.Count(s, "u")
 }
 
 func DoesContainAppearedSymbols(s string) bool {
@@ -74,16 +74,16 @@ func DoesContainAppearedSymbols(s string) bool {
 func DoesContainAppearedSymbolPairs(s string) bool {
 	for i := 0; i < len(s)-1; i++ {
 		if strings.Count(s, s[i:i+2]) > 1 {
-			return true	
+			return true
 		}
-	} 
+	}
 	return false
 }
 
 func DoesContainAppearedSymbolsWithOneBetween(s string) bool {
 	for i := 0; i < len(s)-2; i++ {
 		if s[i] == s[i+2] {
-			return true	
+			return true
 		}
 	}
 	return false

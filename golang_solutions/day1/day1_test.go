@@ -2,7 +2,6 @@ package main
 
 import "testing"
 
-
 func TestProcess(t *testing.T) {
 
 	// (()) and ()() both result in floor 0.
@@ -10,7 +9,7 @@ func TestProcess(t *testing.T) {
 	// ))((((( also results in floor 3.
 	// ()) and ))( both result in floor -1 (the first basement level).
 	// ))) and )())()) both result in floor -3.
-	
+
 	if fl, _ := Process("(())"); fl != 0 {
 		t.Error("(()) result in floor 0")
 	}
@@ -27,7 +26,7 @@ func TestProcess(t *testing.T) {
 		t.Error("(()(()( result in floor 3")
 	}
 
-	if fl, _ := Process("))(((((");  fl != 3 {
+	if fl, _ := Process("))((((("); fl != 3 {
 		t.Error("))((((( result in floor 3")
 	}
 
@@ -56,5 +55,5 @@ func TestProcess(t *testing.T) {
 
 	if _, pos := Process("()())"); pos != 5 {
 		t.Error("()()) causes him to enter the basement at character position 5")
-	}	
+	}
 }

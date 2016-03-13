@@ -1,13 +1,13 @@
-package main 
+package main
 
-import(
-		"fmt"
-		"os"
-		"strings"
-		"bufio"
-		"regexp"
-		"strconv"
-		)
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"regexp"
+	"strconv"
+	"strings"
+)
 
 var lineRegexp = regexp.MustCompile("^(turn on|turn off|toggle) (\\d+),(\\d+) through (\\d+),(\\d+)$")
 
@@ -25,12 +25,12 @@ const (
 	TURNON Instruction = iota
 	TURNOFF
 	TOGGLE
-	)
+)
 
 const (
 	XSideSize = 1000
 	YSideSize = 1000
-	)
+)
 
 func main() {
 	if len(os.Args) != 2 {
@@ -43,7 +43,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-    defer file.Close()
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	resPart1 := make([]bool, XSideSize*YSideSize)
@@ -103,7 +103,7 @@ func ParseInstruction(s string) Instruction {
 	}
 }
 
-func GetCoordinates(s []string) ( coords Coordinates ) {  
+func GetCoordinates(s []string) (coords Coordinates) {
 	var err error
 	coords.from.x, err = strconv.Atoi(s[2])
 	if err != nil {
@@ -120,22 +120,22 @@ func GetCoordinates(s []string) ( coords Coordinates ) {
 	coords.to.y, err = strconv.Atoi(s[5])
 	if err != nil {
 		panic(err)
-	}	
-	return 
+	}
+	return
 }
-	
+
 func TurnOnLights(l *[]bool, coords Coordinates) {
 	for i := coords.from.y; i <= coords.to.y; i++ {
 		for j := coords.from.x; j <= coords.to.x; j++ {
 			(*l)[i*YSideSize+j] = true
 		}
 	}
-} 
+}
 
 func TurnOffLights(l *[]bool, coords Coordinates) {
 	for i := coords.from.y; i <= coords.to.y; i++ {
 		for j := coords.from.x; j <= coords.to.x; j++ {
-			(*l)[i*YSideSize+j] = false 
+			(*l)[i*YSideSize+j] = false
 		}
 	}
 }
@@ -143,7 +143,7 @@ func TurnOffLights(l *[]bool, coords Coordinates) {
 func ToggleLights(l *[]bool, coords Coordinates) {
 	for i := coords.from.y; i <= coords.to.y; i++ {
 		for j := coords.from.x; j <= coords.to.x; j++ {
-			(*l)[i*YSideSize+j] = !(*l)[i*YSideSize+j]  
+			(*l)[i*YSideSize+j] = !(*l)[i*YSideSize+j]
 		}
 	}
 }
@@ -151,7 +151,7 @@ func ToggleLights(l *[]bool, coords Coordinates) {
 func IncrementBrightness(l *[]int, coords Coordinates) {
 	for i := coords.from.y; i <= coords.to.y; i++ {
 		for j := coords.from.x; j <= coords.to.x; j++ {
-			(*l)[i*YSideSize+j]++  
+			(*l)[i*YSideSize+j]++
 		}
 	}
 }
@@ -160,10 +160,10 @@ func DecrementBrightness(l *[]int, coords Coordinates) {
 	for i := coords.from.y; i <= coords.to.y; i++ {
 		for j := coords.from.x; j <= coords.to.x; j++ {
 			if (*l)[i*YSideSize+j] > 0 {
-				(*l)[i*YSideSize+j]--  
+				(*l)[i*YSideSize+j]--
 			}
 		}
-	}	
+	}
 }
 
 func IncreaseBrightness(l *[]int, coords Coordinates, incNum int) {

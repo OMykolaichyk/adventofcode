@@ -1,11 +1,11 @@
-package main 
+package main
 
-import(
-		"fmt"
-		"crypto/md5"
-		"os"
-		"strconv"
-		)
+import (
+	"crypto/md5"
+	"fmt"
+	"os"
+	"strconv"
+)
 
 func main() {
 	var secretKey string
@@ -36,9 +36,9 @@ func PrepareHashInput(s string, i int) []byte {
 }
 
 func IsHashStartsWith(hash, with string) bool {
-	return hash[:len(with)] == with	
+	return hash[:len(with)] == with
 }
 
-func CalculateHash(in []byte) string{
-	return fmt.Sprintf("%x", md5.Sum(in))	
+func CalculateHash(in []byte) string {
+	return fmt.Sprintf("%x", md5.Sum(in))
 }

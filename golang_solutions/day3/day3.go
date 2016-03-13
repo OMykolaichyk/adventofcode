@@ -1,10 +1,10 @@
-package main 
+package main
 
-import(
-		"os"
-		"io/ioutil"
-		"fmt"
-		)
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+)
 
 type Coordinates struct {
 	x, y int
@@ -12,14 +12,14 @@ type Coordinates struct {
 
 func (pos *Coordinates) Move(cmd rune) {
 	switch cmd {
-		case '>':
-			pos.x++
-		case '<':
-			pos.x--
-		case '^':
-			pos.y++
-		case 'v':
-			pos.y--
+	case '>':
+		pos.x++
+	case '<':
+		pos.x--
+	case '^':
+		pos.y++
+	case 'v':
+		pos.y--
 	}
 }
 
@@ -59,7 +59,7 @@ func CountHousesVisitedBySantaAndRobot(s string) int {
 
 	var current *Coordinates
 	for i, c := range s {
-		if i % 2 == 0 {
+		if i%2 == 0 {
 			current = &currentSantaCoords
 		} else {
 			current = &currentRoboSantaCoords

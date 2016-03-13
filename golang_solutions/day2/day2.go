@@ -1,13 +1,13 @@
 package main
 
-import(
-		"os"
-		"fmt"
-		"strings"
-		"strconv"
-		"bufio"
-		"sort"
-		)
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"sort"
+	"strconv"
+	"strings"
+)
 
 func main() {
 	if len(os.Args) != 2 {
@@ -20,7 +20,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-    defer file.Close()
+	defer file.Close()
 
 	var wrappingPaper int = 0
 	var ribbon int = 0
@@ -35,7 +35,7 @@ func main() {
 	fmt.Println("Total ribbon needed", ribbon)
 }
 
-func WrappingPaper(s string) (int) {
+func WrappingPaper(s string) int {
 	l, w, h := ParseInputData(s)
 	return BoxSurfaceArea(l, w, h) + BoxSmallestSideArea(l, w, h)
 }
@@ -44,18 +44,18 @@ func Ribbon(s string) int {
 	return WrappingRibbon(s) + BowRibbon(s)
 }
 
-func WrappingRibbon(s string) (int) {
+func WrappingRibbon(s string) int {
 	l, w, h := ParseInputData(s)
 	min1, min2 := TwoMin(l, w, h)
-	return min1*2+min2*2
+	return min1*2 + min2*2
 }
 
-func BowRibbon(s string) (int) {
+func BowRibbon(s string) int {
 	l, w, h := ParseInputData(s)
-	return 	l*w*h
+	return l * w * h
 }
 
-func ParseInputData(s string ) (l, w, h int) {
+func ParseInputData(s string) (l, w, h int) {
 	list := strings.Split(s, "x")
 	if len(list) != 3 {
 		panic(fmt.Sprint("Parse failed: %s", s))
@@ -67,7 +67,7 @@ func ParseInputData(s string ) (l, w, h int) {
 }
 
 func StringToInt(s string) int {
-	res, err:= strconv.Atoi(s)
+	res, err := strconv.Atoi(s)
 	if err != nil {
 		panic(err)
 	}
@@ -91,8 +91,7 @@ func BoxSmallestSideArea(l, w, h int) int {
 	return min1 * min2
 }
 
-func TwoMin(list ...int) (int, int){
+func TwoMin(list ...int) (int, int) {
 	sort.Ints(list)
 	return list[0], list[1]
 }
-

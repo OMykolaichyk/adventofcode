@@ -1,10 +1,10 @@
 package main
 
-import(
-		"os"
-		"io/ioutil"
-		"fmt"
-		)
+import (
+	"fmt"
+	"io/ioutil"
+	"os"
+)
 
 func main() {
 	if len(os.Args) != 2 {
@@ -36,7 +36,7 @@ func Process(s string) (int, int) {
 		if !flag && floor == -1 {
 			flag = true
 			pos += i
-		} 
+		}
 	}
 	return floor, pos
 }

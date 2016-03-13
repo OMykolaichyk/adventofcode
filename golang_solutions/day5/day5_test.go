@@ -12,7 +12,7 @@ func TestDoesContainProhibitedStrings(t *testing.T) {
 	if !DoesContainProhibitedStrings("apqe") {
 		t.Error("\"apqe\" does contain prohibited string, but result is false")
 	}
-	if !DoesContainProhibitedStrings("acabe"){
+	if !DoesContainProhibitedStrings("acabe") {
 		t.Error("\"acabe\" does contain prohibited string, but result is false")
 	}
 	if DoesContainProhibitedStrings("qweefdsdfe") {
@@ -21,7 +21,7 @@ func TestDoesContainProhibitedStrings(t *testing.T) {
 }
 
 func TestCountVowels(t *testing.T) {
-	if res := CountVowels("ugknbfddgicrmopn"); res != 3{
+	if res := CountVowels("ugknbfddgicrmopn"); res != 3 {
 		t.Error("\"ugknbfddgicrmopn\" does contain 3 vowels, bur result is", res)
 	}
 	if res := CountVowels("aei"); res != 3 {
@@ -95,7 +95,6 @@ func TestDoesContainAppearedSymbolPairs(t *testing.T) {
 	}
 }
 
-
 //does contain at least one letter which repeats with exactly one letter between them
 func TestDoesContainAppearedSymbolsWithOneBetween(t *testing.T) {
 	if !DoesContainAppearedSymbolsWithOneBetween("xyx") {
@@ -135,4 +134,3 @@ func TestIsNiceStringPart2Rules(t *testing.T) {
 		t.Error("\"ieodomkazucvgmuy\" is naughty, but result is true")
 	}
 }
-
