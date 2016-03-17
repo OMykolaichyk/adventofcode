@@ -4,28 +4,112 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 	"strconv"
-	"strings"
-	"time"
 )
 
-type Operation func(x, y uint16) uint16
-type Type int
+type Gate func(x, y uint16) uint16
 
-const (
-	VAR Type = iota
-	VAL
-	NIL
-)
-
-type Arg struct {
-	ThisType Type
-	Var      string
-	Val      uint16
+type Wire struct {
+	left  *Wire
+	right *Wire
+	gate    Gate
+	val   interface{}
 }
 
-type Args struct {
-	x, y Arg
+func (wire *Wire) value() (val uint16) {
+	if wire != nil {
+		if wire.val != nil {
+			val = wire.val.(uint16)
+		} else {
+			val = wire.gate(wire.left.value(), wire.right.value())
+			wire.val = val	
+		}	
+	}
+	return
+}
+
+var gates = map[string]Gate {
+	"":       noop,
+	"NOT":    not,
+	"AND":    and,
+	"OR":     or,
+	"LSHIFT": lshift,
+	"RSHIFT": rshift,
+}
+
+type Wires struct {
+	data map[string]*Wire
+}
+
+func NewWires() Wires {
+	return Wires{data:make(map[string]*Wire)}
+}
+
+var wires = NewWires()
+
+func (wires Wires) getWire(s string) (wire *Wire) {
+	if s == "" {
+		return 	nil
+	}
+	if isVal(s) {
+		wire = new(Wire)
+		wire.val = ParseVal(s)
+	} else {
+		if w, isPresent := wires.data[s]; isPresent {
+			wire = w
+		} else {
+			wire = new(Wire)
+			wires.data[s] = wire
+		}
+	}
+	return
+}
+
+
+var lineRegexp = regexp.MustCompile(
+	"^(?:(?:([a-z]+|[0-9]+)) )?(?:(NOT|OR|AND|LSHIFT|RSHIFT) )?(?:([a-z]+|[0-9]+)) -> ([a-z]+)$")
+
+func Process(s string) {
+	list := lineRegexp.FindStringSubmatch(s)
+	if list == nil {
+		panic("Invalid cmd")
+	}
+
+	node := wires.getWire(list[4])
+
+	gate, isPresent := gates[list[2]] 
+	if!isPresent {
+		panic("Unknown gate")
+	} 
+	node.gate = gate
+
+	node.left = wires.getWire(list[1])
+	node.right = wires.getWire(list[3])
+}
+
+func noop(x, y uint16) uint16 {
+	return y
+}
+
+func not(x, y uint16) uint16 {
+	return ^y
+}
+
+func and(x, y uint16) uint16 {
+	return x & y
+}
+
+func lshift(x, y uint16) uint16 {
+	return x << y
+}
+
+func rshift(x, y uint16) uint16 {
+	return x >> y
+}
+
+func or(x, y uint16) uint16 {
+	return x | y
 }
 
 func main() {
@@ -46,62 +130,10 @@ func main() {
 		str := scanner.Text()
 		Process(str)
 	}
-
-	fmt.Println("wait for a")
-	time.Sleep(10 * time.Second)
-	fmt.Println(<-signals["a"])
+	fmt.Println("a", wires.getWire("a").value())
 }
 
-var signals = make(map[string]chan uint16)
-
-func Process(s string) {
-	args, op, dest := Parse(s)
-
-	signals[dest] = make(chan uint16, 1)
-	xChan := make(chan uint16, 1)
-	yChan := make(chan uint16, 1)
-
-	switch args.x.ThisType {
-	case VAR:
-		signals[args.x.Var] = xChan
-	case VAL:
-		xChan <- uint16(args.x.Val)
-	case NIL:
-		close(xChan)
-	}
-
-	switch args.y.ThisType {
-	case VAR:
-		signals[args.y.Var] = yChan
-	case VAL:
-		yChan <- uint16(args.y.Val)
-	case NIL:
-		close(yChan)
-	}
-
-	go func(x, y, dest chan uint16, op Operation) {
-		var xVal uint16
-		var yVal uint16
-		// xFinish := false
-		// yFinish := false
-			select {
-			case xVal, _ = <-x:
-				// xFinish = true
-			case yVal, _ = <-y:
-				// yFinish = true
-			}
-		dest <- op(xVal, yVal)
-	}(xChan, yChan, signals[dest], op)
-}
-
-func isDigit(s string) bool {
-	if _, err := strconv.Atoi(s); err == nil {
-		return true
-	}
-	return false
-}
-
-func ParseUint(s string) uint16 {
+func ParseVal(s string) uint16 {
 	num, err := strconv.ParseUint(s, 10, 16)
 	if err != nil {
 		panic(err)
@@ -109,76 +141,9 @@ func ParseUint(s string) uint16 {
 	return uint16(num)
 }
 
-func Parse(s string) (args Args, op Operation, dest string) {
-	list := strings.Split(s, " ")
-
-	switch {
-	case list[1] == "->":
-		op = noop
-		args.x = ParseArg1(list[0])
-		args.y = ParseArg1("")
-	case list[2] == "->":
-		op = not
-		args.x = ParseArg1("")
-		args.y = ParseArg1(list[1])
-	case list[3] == "->":
-		op = getOp(list[1])
-		args.x = ParseArg1(list[0])
-		args.y = ParseArg1(list[2])
+func isVal(s string) bool {
+	if _, err := strconv.ParseUint(s, 10, 16); err != nil {
+		return false
 	}
-	dest = list[len(list)-1]
-	return
-}
-
-func ParseArg1(s string) (arg Arg) {
-	if s == "" {
-		arg.ThisType = NIL
-		return
-	}
-	if num, err := strconv.ParseUint(s, 10, 16); err == nil {
-		arg.ThisType = VAL
-		arg.Val = uint16(num)
-	}
-	arg.ThisType = VAR
-	arg.Var = s
-	return
-}
-
-func getOp(s string) func(x, y uint16) uint16 {
-	switch s {
-	case "RSHIFT":
-		return rshift
-	case "LSHIFT":
-		return lshift
-	case "OR":
-		return or
-	case "AND":
-		return and
-	default:
-		panic("Unkmowm Operatoin")
-	}
-}
-
-func noop(x, y uint16) uint16 {
-	return x
-}
-
-func not(x, y uint16) uint16 {
-	return y
-}
-
-func and(x, y uint16) uint16 {
-	return x & y
-}
-
-func lshift(x, y uint16) uint16 {
-	return x << y
-}
-
-func rshift(x, y uint16) uint16 {
-	return x >> y
-}
-
-func or(x, y uint16) uint16 {
-	return x | y
+	return true
 }
