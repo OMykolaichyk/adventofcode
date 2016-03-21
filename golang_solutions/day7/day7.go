@@ -18,12 +18,12 @@ func ParseLine(s string) []string {
 	return list[1:]
 }
 
-func Process(s string, gates Gates, wires Wires) {
+func Process(s string, wires Wires) {
 	list := ParseLine(s)
-	node := wires.GetWire(list[3])
-	node.gate = gates.GetGate(list[1])
-	node.left = wires.GetWire(list[0])
-	node.right = wires.GetWire(list[2])
+	wire := wires.GetWire(list[3])
+	wire.gate = GetGate(list[1])
+	wire.left = wires.GetWire(list[0])
+	wire.right = wires.GetWire(list[2])
 }
 
 func main() {
@@ -39,13 +39,18 @@ func main() {
 	}
 	defer file.Close()
 
-	var gates = NewGates()
 	var wires = NewWires()
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		str := scanner.Text()
-		Process(str, gates, wires)
+		Process(str, wires)
 	}
-	fmt.Println("a", wires.GetWire("a").Value())
+	a := wires.ValueOf("a")
+	fmt.Println("Part1: a =", a)
+
+	wires.SetValue("b", a)
+	wires.ClearCache()
+
+	fmt.Println("Part2: a =", wires.ValueOf("a"))
 }

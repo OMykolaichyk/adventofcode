@@ -1,8 +1,10 @@
 package main
 
-import "testing"
-import "strings"
-import "fmt"
+import (
+	"fmt"
+	"strings"
+	"testing"
+)
 
 var testData = []string{
 	"123 -> x", "456 -> y", "x AND y -> d",
@@ -31,38 +33,47 @@ func TestParseLine(t *testing.T) {
 			}
 		}
 	}
+	assertPanic := func(t *testing.T, f func(string) []string, s string) {
+		defer func() {
+			if r := recover(); r == nil {
+				t.Error("The code did not panic")
+			}
+		}()
+		f(s)
+	}
+
+	assertPanic(t, ParseLine, "")
 }
 
 func TestProcess(t *testing.T) {
-	var gates = NewGates()
 	var wires = NewWires()
 
 	for _, v := range testData {
-		Process(v, gates, wires)
+		Process(v, wires)
 	}
 
-	if res := wires.GetWire("d").Value(); res != 72 {
+	if res := wires.ValueOf("d"); res != 72 {
 		t.Error(fmt.Sprintf("Invalid result: %v.Expected: %v", res, 72))
 	}
-	if res := wires.GetWire("e").Value(); res != 507 {
+	if res := wires.ValueOf("e"); res != 507 {
 		t.Error(fmt.Sprintf("Invalid result: %v.Expected: %v", res, 507))
 	}
-	if res := wires.GetWire("f").Value(); res != 492 {
+	if res := wires.ValueOf("f"); res != 492 {
 		t.Error(fmt.Sprintf("Invalid result: %v.Expected: %v", res, 492))
 	}
-	if res := wires.GetWire("g").Value(); res != 114 {
+	if res := wires.ValueOf("g"); res != 114 {
 		t.Error(fmt.Sprintf("Invalid result: %v.Expected: %v", res, 114))
 	}
-	if res := wires.GetWire("h").Value(); res != 65412 {
+	if res := wires.ValueOf("h"); res != 65412 {
 		t.Error(fmt.Sprintf("Invalid result: %v.Expected: %v", res, 65412))
 	}
-	if res := wires.GetWire("i").Value(); res != 65079 {
+	if res := wires.ValueOf("i"); res != 65079 {
 		t.Error(fmt.Sprintf("Invalid result: %v.Expected: %v", res, 65079))
 	}
-	if res := wires.GetWire("x").Value(); res != 123 {
+	if res := wires.ValueOf("x"); res != 123 {
 		t.Error(fmt.Sprintf("Invalid result: %v.Expected: %v", res, 123))
 	}
-	if res := wires.GetWire("y").Value(); res != 456 {
+	if res := wires.ValueOf("y"); res != 456 {
 		t.Error(fmt.Sprintf("Invalid result: %v.Expected: %v", res, 456))
 	}
 }
